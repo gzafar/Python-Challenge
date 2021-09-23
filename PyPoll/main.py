@@ -14,10 +14,64 @@ with open(csvpath) as csvfile:
 
     print(csvreader)
 
-    #Read header row
-    csv_header = next(csvreader)
-    print(f"CSV Header: {csv_header}")
+    # Total vote counter & list
+    total_votes = 0
+    votes = []
+    
+    # Create a list & dictionary to hold candidates' names
+    candidates = []
+    dict_of_candidates = {}
+    candidate_votes = {}
 
-    #Read each row after header
+    # Set variables 
+    i = 0
+
+    #  header row
+    csv_header = next(csvreader)
+    #print(f"CSV Header: {csv_header}")
+
+    # Loop through each row after header
     for row in csvreader:
-        print(row)
+        
+        # Add totals to a list
+        votes.append(row[0])
+
+        i = int(row[0])
+
+        # Count all votes in data set
+        total_votes = len(votes)
+
+        # Check if candidate is in dictionary of candidates
+        if row[2] not in dict_of_candidates.keys():
+            dict_of_candidates[row[2]] = 1
+
+        # Add to list if candidate comes up
+        else:
+            dict_of_candidates[row[2]] += 1
+
+winner = max(dict_of_candidates, key=dict_of_candidates.get) 
+
+for candidates in dict_of_candidates.keys():
+    candidate_name = ""
+    votes.append(candidate_name)
+    candidate_name = '\n'.join([candidate_name + "{:.2%}".format(dict_of_candidates[candidates] / total_votes) + "(" + str(dict_of_candidates[candidates]) + ")" ])
+
+# Print final answers
+print("Election Results")
+print("----------------------------")
+print(f"Total Votes: {total_votes}")
+print("----------------------------")
+print(candidates, "{:.2%}".format(dict_of_candidates[candidates] / total_votes) + " (" + str(dict_of_candidates[candidates]) + ")")
+print("----------------------------")
+print(f"Winner: {(winner)}")
+
+# Export text file
+Election_Results = open("Election_Results.txt","w")
+Election_Results.write("Election Results\n")
+Election_Results.write("----------------------------\n")
+Election_Results.write(f"Total Votes: {total_votes}\n")
+Election_Results.write("----------------------------\n")
+Election_Results.write("{candidate_name}\n")
+Election_Results.write("----------------------------\n") 
+Election_Results.write(f"Winner: {(winner)}\n")
+Election_Results.close() 
